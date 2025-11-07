@@ -1,28 +1,47 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import BuildingsBackground from './components/BuildingsBackground.jsx';
+import HeaderProfile from './components/HeaderProfile.jsx';
+import Experience from './components/Experience.jsx';
+import EducationCerts from './components/EducationCerts.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY || window.pageYOffset);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="relative min-h-screen bg-neutral-950 text-white">
+      <BuildingsBackground scrollY={scrollY} />
+
+      <header className="sticky top-0 z-20 backdrop-blur bg-black/30 ring-1 ring-white/10">
+        <div className="container mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+          <a href="#" className="font-semibold tracking-tight">Civil Engineer Portfolio</a>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-white/80">
+            <a href="#experience" className="hover:text-white transition">Experience</a>
+            <a href="#education" className="hover:text-white transition">Education</a>
+            <a href="#skills" className="hover:text-white transition">Skills</a>
+          </nav>
         </div>
-      </div>
+      </header>
+
+      <main className="relative z-10">
+        <HeaderProfile />
+        <section id="experience"><Experience /></section>
+        <section id="education"><EducationCerts /></section>
+      </main>
+
+      <footer className="relative z-10 py-10 text-center text-white/60">
+        <div className="container mx-auto px-6 md:px-10">
+          © {new Date().getFullYear()} Civil Engineer — All rights reserved.
+        </div>
+      </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
